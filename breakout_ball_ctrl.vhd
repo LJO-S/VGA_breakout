@@ -5,8 +5,7 @@ use ieee.numeric_std.all;
 use work.breakout_pkg.all;
 
 entity breakout_ball_ctrl is
-    port
-    (
+    port (
         i_CLK         : in std_logic;
         i_game_active : in std_logic;
 
@@ -14,10 +13,10 @@ entity breakout_ball_ctrl is
         i_row_count_div : in std_logic_vector(6 downto 0); -- tile-scaled counter (left-shifted by 3 = divided by 8)
 
         o_draw_ball : out std_logic;
-        
+
         -- 7 bits, i.e. 0-127 for both X and Y
-        o_ball_X    : out std_logic_vector(6 downto 0); 
-        o_ball_Y    : out std_logic_vector(6 downto 0)
+        o_ball_X : out std_logic_vector(6 downto 0);
+        o_ball_Y : out std_logic_vector(6 downto 0)
     );
 end breakout_ball_ctrl;
 
@@ -45,10 +44,10 @@ begin
         if rising_edge(i_CLK) then
             if (i_game_active = '0') then
                 -- idle state for ball
-                r_ball_X      <= c_GAME_WIDTH/2;
-                r_ball_Y      <= c_GAME_HEIGHT/2;
-                r_ball_X_prev <= c_GAME_WIDTH/2 + 1; -- +- will determine initial direction of ball
-                r_ball_Y_prev <= c_GAME_HEIGHT/2 - 1;
+                r_ball_X      <= (c_GAME_WIDTH_START + c_GAME_WIDTH_END)/2;
+                r_ball_Y      <= (c_GAME_HEIGHT_START + c_GAME_HEIGHT_END)/2;
+                r_ball_X_prev <= (c_GAME_WIDTH_START + c_GAME_WIDTH_END)/2 + 1; -- +- will determine initial direction of ball
+                r_ball_Y_prev <= (c_GAME_HEIGHT_START + c_GAME_HEIGHT_END)/2 - 1;
             else
                 if (r_ball_count = c_BALL_SPEED) then
                     r_ball_count <= 0;
@@ -60,7 +59,7 @@ begin
 
                     -- Ball is moving right
                     if (r_ball_X_prev < r_ball_X) then
-                        if (r_ball_X = c_GAME_WIDTH - 1) then
+                        if (r_ball_X = c_GAME_WIDTH_END - 1) then
                             -- at game boundary -> bounce
                             r_ball_X <= r_ball_X - 1;
                         else
@@ -68,7 +67,7 @@ begin
                         end if;
                         -- Ball is moving left
                     elsif (r_ball_X_prev > r_ball_X) then
-                        if (r_ball_X = 0) then
+                        if (r_ball_X = c_GAME_WIDTH_START) then
                             -- at game boundary -> bounce
                             r_ball_X <= r_ball_X + 1;
                         else
@@ -83,7 +82,7 @@ begin
 
                     -- Ball is moving up
                     if (r_ball_Y < r_ball_Y_prev) then
-                        if (r_ball_Y = c_GAME_CEIL) then
+                        if (r_ball_Y = c_GAME_HEIGHT_START) then
                             -- at game boundary -> bounce
                             r_ball_Y <= r_ball_Y + 1;
                         else
@@ -91,7 +90,7 @@ begin
                         end if;
                         -- Ball is moving down
                     elsif (r_ball_Y > r_ball_Y_prev) then
-                        if (r_ball_Y = c_GAME_HEIGHT - 1) then
+                        if (r_ball_Y = c_GAME_HEIGHT_END - 1) then
                             -- at game boundary -> bounce
                             r_ball_Y <= r_ball_Y - 1;
                         else
@@ -105,8 +104,6 @@ begin
             end if;
         end if;
     end process; -- p_ball_move
-
-
 
     p_ball_draw : process (i_CLK)
     begin

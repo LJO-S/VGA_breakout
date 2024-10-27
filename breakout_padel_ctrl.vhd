@@ -28,7 +28,7 @@ architecture rtl of breakout_paddle_ctrl is
     signal r_paddle_count : natural range 0 to c_paddle_SPEED := 0;
 
     -- Start location of paddle
-    signal r_paddle_X : natural range 0 to (c_GAME_WIDTH_END - c_paddle_WIDTH - 1) := (c_GAME_WIDTH_END + c_GAME_HEIGHT_START - c_paddle_WIDTH - 1)/2; -- probably shouldnt start at 0
+    signal r_paddle_X : natural range 0 to (c_GAME_WIDTH_END - c_paddle_WIDTH - 1) := (c_GAME_WIDTH_START + c_GAME_HEIGHT_END - c_paddle_WIDTH - 1)/2; -- probably shouldnt start at 0 range
 
     signal r_draw_paddle : std_logic := '0';
 begin
@@ -54,14 +54,14 @@ begin
     begin
         if rising_edge(i_CLK) then
             if (i_LEFT = '1') and (r_paddle_count = c_paddle_SPEED) then
-                if (r_paddle_X = 0) then
-                    r_paddle_X <= 0;
+                if (r_paddle_X = c_GAME_WIDTH_START) then
+                    r_paddle_X <= c_GAME_WIDTH_START;
                 else
                     r_paddle_X <= r_paddle_X - 1;
                 end if;
             elsif (i_RIGHT = '1') and (r_paddle_count = c_paddle_SPEED) then
-                if (r_paddle_X = (c_GAME_WIDTH - c_paddle_WIDTH - 1)) then
-                    r_paddle_X <= (c_GAME_WIDTH - c_paddle_WIDTH - 1);
+                if (r_paddle_X = (c_GAME_WIDTH_END - c_paddle_WIDTH - 1)) then
+                    r_paddle_X <= (c_GAME_WIDTH_END - c_paddle_WIDTH - 1);
                 else
                     r_paddle_X <= r_paddle_X + 1;
                 end if;
