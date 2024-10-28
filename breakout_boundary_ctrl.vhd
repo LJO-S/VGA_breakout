@@ -14,12 +14,9 @@ entity breakout_boundary_ctrl is
 end entity breakout_boundary_ctrl;
 
 architecture rtl of breakout_boundary_ctrl is
-    signal w_col_index : integer range 0 to 2 ** (i_col_count_div'length) := 0;
-    signal w_row_index : integer range 0 to 2 ** (i_row_count_div'length) := 0;
-
-    --signal r_draw_ceil : std_logic := '0';
-    --signal r_draw_wall : std_logic := '0';
-    signal r_draw_boundary : std_logic := '0';
+    signal w_col_index     : integer range 0 to 2 ** (i_col_count_div'length) := 0;
+    signal w_row_index     : integer range 0 to 2 ** (i_row_count_div'length) := 0;
+    signal r_draw_boundary : std_logic                                        := '0';
 
 begin
     w_col_index <= to_integer(unsigned(i_col_count_div));
@@ -29,7 +26,7 @@ begin
     begin
         if rising_edge(i_CLK) then
             -- Ceiling
-            if (w_col_index <= 3) or (w_col_index >= 76) or (w_row_index >= 2) and (w_row_index <= 4) then
+            if ((w_col_index >= 0) and (w_col_index <= 3)) or ((w_col_index <= 79) and (w_col_index >= 76)) or ((w_row_index >= 2) and (w_row_index <= 4)) then
                 r_draw_boundary <= '1';
             else
                 r_draw_boundary <= '0';
