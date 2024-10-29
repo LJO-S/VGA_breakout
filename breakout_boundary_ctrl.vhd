@@ -26,7 +26,7 @@ begin
     begin
         if rising_edge(i_CLK) then
             -- Ceiling
-            if ((w_col_index >= 0) and (w_col_index <= 3)) or ((w_col_index <= 79) and (w_col_index >= 76)) or ((w_row_index >= 2) and (w_row_index <= 4)) then
+            if ((w_col_index >= 0) and (w_col_index <= 3)) or ((w_col_index <= 79) and (w_col_index >= 76)) or ((w_row_index >=4) and (w_row_index <= 6)) then
                 r_draw_boundary <= '1';
             else
                 r_draw_boundary <= '0';
