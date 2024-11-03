@@ -7,8 +7,8 @@ package breakout_pkg is
     constant c_PADDLE_SPEED      : integer := 250_000; -- 1 tile movement every 10 ms 
     constant c_PADDLE_HEIGHT     : integer := 1;
     constant c_GAME_WIDTH_START  : integer := 4;
-    constant c_GAME_WIDTH_END    : integer := 75;
-    constant c_GAME_HEIGHT_START : integer := 5;
+    constant c_GAME_WIDTH_END    : integer := 76;
+    constant c_GAME_HEIGHT_START : integer := 6;
     constant c_GAME_HEIGHT_END   : integer := 60;
     constant c_PLAYER_PADDLE_Y   : integer := c_GAME_HEIGHT_END - 1;
 
