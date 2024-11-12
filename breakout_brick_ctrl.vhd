@@ -31,7 +31,7 @@ architecture rtl of breakout_brick_ctrl is
 
     -- Each brick is 6 tiles wide (1:8 scaling)
     constant c_BRICK_ARRAY_X : t_BRICK_ARRAY_X := (4, 10, 16, 22, 28, 34, 40, 46, 52, 58, 64, 70);
-    constant c_BRICK_ARRAY_Y : t_BRICK_ARRAY_Y := (4, 6, 8, 10);
+    constant c_BRICK_ARRAY_Y : t_BRICK_ARRAY_Y := (7, 9, 11, 13);
 
     signal w_brick_YLW : std_logic_vector(11 downto 0)                         := (others => '0');
     signal w_brick_PRL : std_logic_vector(11 downto 0)                         := (others => '0');
