@@ -12,6 +12,9 @@ entity breakout_ball_ctrl is
         i_col_count_div : in std_logic_vector(6 downto 0); -- tile-scaled counter (left-shifted by 3 = divided by 8)
         i_row_count_div : in std_logic_vector(6 downto 0); -- tile-scaled counter (left-shifted by 3 = divided by 8)
 
+        --i_hit_Y : in std_logic;
+        --i_hit_X : in std_logic;
+
         o_draw_ball : out std_logic;
 
         -- 7 bits, i.e. 0-127 for both X and Y
