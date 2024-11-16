@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
---use work.breakout_pkg.all;
+use work.breakout_pkg.all;
 
 entity breakout_brick_ctrl is
     port (
@@ -26,12 +26,7 @@ entity breakout_brick_ctrl is
 end entity;
 
 architecture rtl of breakout_brick_ctrl is
-    type t_BRICK_ARRAY_X is array (0 to 11) of natural;
-    type t_BRICK_ARRAY_Y is array (0 to 3) of natural;
-
-    -- Each brick is 6 tiles wide (1:8 scaling)
-    constant c_BRICK_ARRAY_X : t_BRICK_ARRAY_X := (4, 10, 16, 22, 28, 34, 40, 46, 52, 58, 64, 70);
-    constant c_BRICK_ARRAY_Y : t_BRICK_ARRAY_Y := (7, 9, 11, 13);
+    
 
     signal w_brick_YLW : std_logic_vector(11 downto 0)                         := (others => '0');
     signal w_brick_PRL : std_logic_vector(11 downto 0)                         := (others => '0');
