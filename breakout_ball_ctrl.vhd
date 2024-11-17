@@ -12,8 +12,8 @@ entity breakout_ball_ctrl is
         i_col_count_div : in std_logic_vector(6 downto 0); -- tile-scaled counter (left-shifted by 3 = divided by 8)
         i_row_count_div : in std_logic_vector(6 downto 0); -- tile-scaled counter (left-shifted by 3 = divided by 8)
 
-        --i_hit_Y : in std_logic;
-        --i_hit_X : in std_logic;
+        i_hit_Y : in std_logic;
+        i_hit_X : in std_logic;
 
         o_draw_ball : out std_logic;
 
@@ -37,10 +37,28 @@ architecture arch of breakout_ball_ctrl is
 
     signal r_draw_ball : std_logic := '0';
 
+    signal r_hit_X   : std_logic := '0';
+    signal r_hit_Y   : std_logic := '0';
 begin
 
     w_col_index <= to_integer(unsigned(i_col_count_div));
     w_row_index <= to_integer(unsigned(i_row_count_div));
+
+    p_register_hit : process (i_CLK)
+    begin
+        if rising_edge(i_CLK) then
+            if (i_hit_X = '1') then
+                r_hit_X <= '1';
+            elsif (r_ball_count = c_BALL_SPEED) then
+                r_hit_X <= '0';
+            end if;
+            if (i_hit_Y = '1') then
+                r_hit_Y <= '1';
+            elsif (r_ball_count = c_BALL_SPEED) then
+                r_hit_Y <= '0';
+            end if;
+        end if;
+    end process;
 
     p_ball_move : process (i_CLK)
     begin
@@ -50,7 +68,7 @@ begin
                 r_ball_X      <= (c_GAME_WIDTH_START + c_GAME_WIDTH_END)/2;
                 r_ball_Y      <= (c_GAME_HEIGHT_START + c_GAME_HEIGHT_END)/2;
                 r_ball_X_prev <= (c_GAME_WIDTH_START + c_GAME_WIDTH_END)/2 + 1; -- +- will determine initial direction of ball
-                r_ball_Y_prev <= (c_GAME_HEIGHT_START + c_GAME_HEIGHT_END)/2 - 1;
+                r_ball_Y_prev <= (c_GAME_HEIGHT_START + c_GAME_HEIGHT_END)/2 + 1;
             else
                 if (r_ball_count = c_BALL_SPEED) then
                     r_ball_count <= 0;
@@ -62,7 +80,7 @@ begin
 
                     -- Ball is moving right
                     if (r_ball_X_prev < r_ball_X) then
-                        if (r_ball_X = c_GAME_WIDTH_END - 1) then
+                        if (r_ball_X = c_GAME_WIDTH_END - 1) or (r_hit_X = '1') then
                             -- at game boundary -> bounce
                             r_ball_X <= r_ball_X - 1;
                         else
@@ -70,7 +88,7 @@ begin
                         end if;
                         -- Ball is moving left
                     elsif (r_ball_X_prev > r_ball_X) then
-                        if (r_ball_X = c_GAME_WIDTH_START) then
+                        if (r_ball_X = c_GAME_WIDTH_START) or (r_hit_X = '1') then
                             -- at game boundary -> bounce
                             r_ball_X <= r_ball_X + 1;
                         else
@@ -85,7 +103,7 @@ begin
 
                     -- Ball is moving up
                     if (r_ball_Y < r_ball_Y_prev) then
-                        if (r_ball_Y = c_GAME_HEIGHT_START) then
+                        if (r_ball_Y = c_GAME_HEIGHT_START) or (r_hit_Y = '1') then
                             -- at game boundary -> bounce
                             r_ball_Y <= r_ball_Y + 1;
                         else
@@ -93,7 +111,7 @@ begin
                         end if;
                         -- Ball is moving down
                     elsif (r_ball_Y > r_ball_Y_prev) then
-                        if (r_ball_Y = c_GAME_HEIGHT_END - 1) then
+                        if (r_ball_Y = c_GAME_HEIGHT_END - 1) or (r_hit_Y = '1') then
                             -- at game boundary -> bounce
                             r_ball_Y <= r_ball_Y - 1;
                         else
