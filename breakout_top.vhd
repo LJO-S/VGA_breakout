@@ -4,6 +4,8 @@ use ieee.numeric_std.all;
 
 use work.breakout_pkg.all;
 
+-- TODO: need to fix how array defaults back to 1s after winning, cannot have dual drivers in 2 processes
+
 entity breakout_top is
     generic (
         g_VIDEO_WIDTH     : integer;
@@ -63,14 +65,14 @@ architecture rtl of breakout_top is
     signal r_ball_HIT_X  : std_logic := '0';
     signal r_ball_HIT_Y  : std_logic := '0';
 
-    signal w_draw_YLW   : std_logic;
-    signal w_draw_PRL   : std_logic;
-    signal w_draw_BLU   : std_logic;
-    signal w_draw_GRN   : std_logic;
-    signal w_brick_YLW  : std_logic_vector(11 downto 0) := (others => '1');
-    signal w_brick_PRL  : std_logic_vector(11 downto 0) := (others => '1');
-    signal w_brick_BLU  : std_logic_vector(11 downto 0) := (others => '1');
-    signal w_brick_GRN  : std_logic_vector(11 downto 0) := (others => '1');
+    signal w_draw_YLW  : std_logic;
+    signal w_draw_PRL  : std_logic;
+    signal w_draw_BLU  : std_logic;
+    signal w_draw_GRN  : std_logic;
+    signal w_brick_YLW : std_logic_vector(11 downto 0) := (others => '1');
+    signal w_brick_PRL : std_logic_vector(11 downto 0) := (others => '1');
+    signal w_brick_BLU : std_logic_vector(11 downto 0) := (others => '1');
+    signal w_brick_GRN : std_logic_vector(11 downto 0) := (others => '1');
 
     signal w_draw_BOUNDARY : std_logic := '0';
     signal w_draw_ANY      : std_logic := '0';
@@ -164,17 +166,18 @@ begin
     end process;
     ----------------------------------------------------------------
     p_game_done : process (i_CLK)
-        variable v_game_done : std_logic := '0';
+        variable v_game_done : std_logic := '1';
     begin
         if rising_edge(i_CLK) then
             if (w_game_active) then
+                v_game_done := '0';
                 for i in 0 to 3 loop
                     for j in 0 to 11 loop
                         v_game_done := v_game_done or r_brick_on_array(i)(j);
                     end loop;
                 end loop;
             end if;
-            if (v_game_done = '1') then
+            if (v_game_done = '0') then
                 r_game_done <= '1';
             else
                 r_game_done <= '0';
@@ -250,7 +253,7 @@ begin
                     if (i_game_start = '1') then
                         s_STATE          <= s_IDLE;
                         r_life_count     <= to_unsigned(6, r_life_count'length); -- max health
-                        r_brick_on_array <= (others => (others => '1'));
+                        --r_brick_on_array <= (others => (others => '1'));
                     end if;
                     ------------------------------------------------
                 when s_CLEANUP => s_STATE <= s_IDLE;
@@ -269,6 +272,8 @@ begin
             i_game_active   => w_game_active,
             i_col_count_div => w_col_count_div_8,
             i_row_count_div => w_row_count_div_8,
+            i_hit_Y         => r_ball_HIT_Y,
+            i_hit_X         => r_ball_HIT_X,
             o_draw_ball     => w_draw_ball,
             o_ball_X        => w_ball_X,
             o_ball_Y        => w_ball_Y
