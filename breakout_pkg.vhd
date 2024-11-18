@@ -15,7 +15,7 @@ package breakout_pkg is
     constant c_PLAYER_PADDLE_Y   : integer := c_GAME_HEIGHT_END - 1;
 
     constant c_PADDLE_WIDTH : integer := 8;
-    constant c_BALL_SPEED   : integer := 1_000_000;--1_000_000;
+    constant c_BALL_SPEED   : integer := 1_000_000;
 
     constant c_SCORE_LIMIT : integer := 9;
 end package;
