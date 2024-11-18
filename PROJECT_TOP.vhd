@@ -5,6 +5,7 @@ use work.breakout_pkg.all;
 
 entity PROJECT_TOP is
     port (
+        i_CLK        : in std_logic;
         i_GAME_START : in std_logic;
         i_LEFT       : in std_logic;
         i_RIGHT      : in std_logic;
@@ -34,17 +35,25 @@ architecture rtl of PROJECT_TOP is
     signal w_LEFT               : std_logic;
     signal w_RIGHT              : std_logic;
     signal w_game_start         : std_logic;
-    signal w_RED_VIDEO_breakout : std_logic_vector(c_VIDEO_WIDTH downto 0) := (others => '0');
-    signal w_BLU_VIDEO_breakout : std_logic_vector(c_VIDEO_WIDTH downto 0) := (others => '0');
-    signal w_GRN_VIDEO_breakout : std_logic_vector(c_VIDEO_WIDTH downto 0) := (others => '0');
+    signal w_RED_VIDEO_breakout : std_logic_vector(c_VIDEO_WIDTH - 1 downto 0) := (others => '0');
+    signal w_BLU_VIDEO_breakout : std_logic_vector(c_VIDEO_WIDTH - 1 downto 0) := (others => '0');
+    signal w_GRN_VIDEO_breakout : std_logic_vector(c_VIDEO_WIDTH - 1 downto 0) := (others => '0');
     -- Signals VGA_sync_porch
-    signal w_HSYNC_VGA : std_logic;
-    signal w_VSYNC_VGA : std_logic;
-    signal w_RED_VIDEO_VGA : std_logic_vector(c_VIDEO_WIDTH downto 0) := (others => '0');
-    signal w_BLU_VIDEO_VGA : std_logic_vector(c_VIDEO_WIDTH downto 0) := (others => '0');
-    signal w_GRN_VIDEO_VGA : std_logic_vector(c_VIDEO_WIDTH downto 0) := (others => '0');
-    signal w_HSYNC_out : std_logic;
-    signal w_VSYNC_out : std_logic;
+    signal w_HSYNC_VGA     : std_logic;
+    signal w_VSYNC_VGA     : std_logic;
+    signal w_RED_VIDEO_VGA : std_logic_vector(c_VIDEO_WIDTH - 1 downto 0) := (others => '0');
+    signal w_BLU_VIDEO_VGA : std_logic_vector(c_VIDEO_WIDTH - 1 downto 0) := (others => '0');
+    signal w_GRN_VIDEO_VGA : std_logic_vector(c_VIDEO_WIDTH - 1 downto 0) := (others => '0');
+    signal w_HSYNC_out     : std_logic;
+    signal w_VSYNC_out     : std_logic;
+
+    --component clk_wiz is
+    --    port (
+    --        i_CLK : in std_logic;
+    --        o_CLK : out std_logic
+    --    );
+    --end component;
+
 begin
     clk_wiz_inst : entity work.clk_wiz
         port map
@@ -143,7 +152,7 @@ begin
         );
     -----------------------------------------------------
     -- Output signals
-    g_output_video : for i in 0 to c_VIDEO_WIDTH-1 generate
+    g_output_video : for i in 0 to c_VIDEO_WIDTH - 1 generate
         o_RED_video(i) <= w_RED_VIDEO_VGA(i);
         o_BLU_video(i) <= w_BLU_VIDEO_VGA(i);
         o_GRN_video(i) <= w_GRN_VIDEO_VGA(i);
