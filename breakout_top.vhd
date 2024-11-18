@@ -169,7 +169,7 @@ begin
         variable v_game_done : std_logic := '1';
     begin
         if rising_edge(i_CLK) then
-            if (w_game_active) then
+            if (w_game_active = '1') then
                 v_game_done := '0';
                 for i in 0 to 3 loop
                     for j in 0 to 11 loop
@@ -190,7 +190,7 @@ begin
         if rising_edge(i_CLK) then
             r_ball_HIT_X <= '0';
             r_ball_HIT_Y <= '0';
-            if (w_game_active) then
+            if (w_game_active = '1') then
                 for i in 0 to 3 loop --     __GRN__BLU__PRL__YELLOW__
                     if (to_integer(unsigned(w_ball_Y)) >= c_BRICK_ARRAY_Y(i)) and (to_integer(unsigned(w_ball_Y)) <= (c_BRICK_ARRAY_Y(i) + 1)) then
                         for j in 0 to 11 loop
@@ -216,7 +216,7 @@ begin
                         end loop;
                     end if;
                 end loop;
-            elsif (w_game_over) then
+            elsif (w_game_over = '1') then
                 r_brick_on_array <= (others => (others => '1')); -- fill bricks
             end if;
         end if;
