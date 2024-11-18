@@ -216,6 +216,8 @@ begin
                         end loop;
                     end if;
                 end loop;
+            elsif (w_game_over) then
+                r_brick_on_array <= (others => (others => '1')); -- fill bricks
             end if;
         end if;
     end process;
@@ -251,8 +253,8 @@ begin
                     ------------------------------------------------
                 when s_GAME_OVER =>
                     if (i_game_start = '1') then
-                        s_STATE          <= s_IDLE;
-                        r_life_count     <= to_unsigned(6, r_life_count'length); -- max health
+                        s_STATE      <= s_IDLE;
+                        r_life_count <= to_unsigned(6, r_life_count'length); -- max health
                         --r_brick_on_array <= (others => (others => '1'));
                     end if;
                     ------------------------------------------------
