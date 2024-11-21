@@ -6,7 +6,7 @@ package breakout_pkg is
     constant c_BRICK_ARRAY_X : t_BRICK_ARRAY_X := (4, 10, 16, 22, 28, 34, 40, 46, 52, 58, 64, 70);
     constant c_BRICK_ARRAY_Y : t_BRICK_ARRAY_Y := (7, 9, 11, 13);
 
-    constant c_PADDLE_SPEED      : integer := 2_500_000; -- 1 tile movement every 100 ms 
+    constant c_PADDLE_SPEED      : integer := 500_000; 
     constant c_PADDLE_HEIGHT     : integer := 1;
     constant c_GAME_WIDTH_START  : integer := 4;
     constant c_GAME_WIDTH_END    : integer := 76;
